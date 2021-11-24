@@ -37,7 +37,16 @@ GameObject* chest18{};
 GameObject* chest19{};
 GameObject* chest20{};//cuarta linea
 //comida
-GameObject* food1{};//
+GameObject* food1{};
+GameObject* food2{};
+GameObject* food3{};
+GameObject* food4{};
+GameObject* food5{};
+GameObject* food6{};
+GameObject* food7{};
+GameObject* food8{};
+GameObject* food9{};
+GameObject* food10{};
 
 
 
@@ -64,10 +73,51 @@ Game::Game()
   character1->SetTagName("player");//nuevo
 
   //comidita
-  //food1 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  //new sf::Vector2f(500, 100), b2BodyType::b2_staticBody, window, world);
+  food1 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(480, 95), b2BodyType::b2_staticBody, window, world);
+  food1->SetTagName("food");
+  food2 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(320, 305), b2BodyType::b2_staticBody, window, world);
+  food2->SetTagName("food");
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(182, 305), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
 
-  //food1->SetTagName("food");
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(481, 305), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(615, 305), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(181, 439), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+  
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(334, 439), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(480, 439), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(621, 439), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
+
+  food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
+  new sf::Vector2f(185, 95), b2BodyType::b2_staticBody, window, world);
+  food3->SetTagName("food");
+  gameObjects->push_back(food3);
 
   chest1 = new GameObject("assets/newsprites.png", 6, 1, 16, 16, playerScale,
   new sf::Vector2f(110, 100), b2BodyType::b2_staticBody, window, world);
@@ -162,7 +212,9 @@ Game::Game()
   gameObjects->push_back(chest18);
   gameObjects->push_back(chest19);
   gameObjects->push_back(chest20);//fourth line
-  //gameObjects->push_back(food1);
+  gameObjects->push_back(food1);
+  gameObjects->push_back(food2);
+  gameObjects->push_back(food3);
 
   
 
