@@ -43,7 +43,7 @@ GameObject* food1{};//
 
 TileGroup* tileGroup{};
 
-sf::View* view1{};//nuevo
+sf::View* view1{};//nuevo comment
 
 
 Game::Game()
