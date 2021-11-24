@@ -21,6 +21,8 @@ sf::Vector2f* position, b2BodyType bodyType,sf::RenderWindow*& window, b2World*&
 
 GameObject::~GameObject()
 {
+  delete drawable;
+  delete rigidbody;
 }
 
 void GameObject::Update(float& deltaTime)
@@ -44,3 +46,8 @@ void GameObject::Draw()
   {
     this->tagName = tagName;
   }
+
+  sf::Vector2f GameObject::GetPosition()
+{
+  return rigidbody->GetPositionSFML();
+}

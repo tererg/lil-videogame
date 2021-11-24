@@ -4,6 +4,7 @@
 #include "SFML/Graphics.hpp"
 #include "Drawable.hh"
 
+
 class GameObject
 {
 protected:
@@ -14,6 +15,7 @@ protected:
   b2World* world{};
   float scale{};
   const char* tagName{};
+  std::vector<GameObject*>* deleteList;
 
 public:
   GameObject(const char* textureUrl, int col, int row, float width, float height, float scale,
@@ -24,4 +26,5 @@ public:
   virtual void Draw();
   const char* GetTagName() const;
   void SetTagName(const char* tagName);
+  sf::Vector2f GetPosition();
 };

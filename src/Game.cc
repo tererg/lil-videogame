@@ -7,6 +7,7 @@
 #include "Character.hh"
 #include<iostream>
 #include "TileGroup.hh"
+#include "enemigo.hh"
 
 Collider* collider{new Collider(100, 100, 100, 100, sf::Color::Green, 5.f)};
 
@@ -16,6 +17,7 @@ const float playerSpeed{200.f};
 const float playerScale{4.f};
 
 Character* character1{};
+enemigo* enemigo1{};
 GameObject* chest1{};
 GameObject* chest2{};
 GameObject* chest3{};
@@ -48,7 +50,7 @@ GameObject* food8{};
 GameObject* food9{};
 GameObject* food10{};
 
-
+ 
 
 TileGroup* tileGroup{};
 
@@ -64,63 +66,70 @@ Game::Game()
   gravity = new b2Vec2(0.f, 0.f);
   world = new b2World(*gravity);  
   drawPhysics = new DrawPhysics(window);
-  contactEventManager = new ContactEventManager();
+  deleteList = new std::vector<GameObject*>();
+  contactEventManager = new ContactEventManager(deleteList);
   gameObjects = new std::vector<GameObject*>();
+  
   
   character1 = new Character("assets/newsprites2.png", 0, 5, 16.f, 16.f,
   playerScale, playerSpeed, new sf::Vector2f(110, 155), window, world);
 
   character1->SetTagName("player");//nuevo
 
+  enemigo1 = new enemigo("assets/newsprites2.png", 0, 5, 16.f, 16.f,
+  playerScale, playerSpeed, new sf::Vector2f(320, 155), window, world);
+
+  enemigo1->SetTagName("enemigo");//nuevo
+
   //comidita
   food1 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(480, 95), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(115, 302), b2BodyType::b2_staticBody, window, world);
   food1->SetTagName("food");
   food2 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(320, 305), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(250, 304), b2BodyType::b2_staticBody, window, world);
   food2->SetTagName("food");
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(182, 305), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(407, 303), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(481, 305), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(547, 303), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(615, 305), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(694, 301), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(181, 439), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(113, 441), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
   
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(334, 439), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(255, 441), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(480, 439), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(411, 441), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(621, 439), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(694, 443), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   food3 = new GameObject("assets/newsprites2.png", 7, 1, 16, 16, playerScale,//nuevo
-  new sf::Vector2f(185, 95), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(479, 94), b2BodyType::b2_staticBody, window, world);
   food3->SetTagName("food");
   gameObjects->push_back(food3);
 
   chest1 = new GameObject("assets/newsprites.png", 6, 1, 16, 16, playerScale,
-  new sf::Vector2f(110, 100), b2BodyType::b2_staticBody, window, world);
+  new sf::Vector2f(620, 100), b2BodyType::b2_staticBody, window, world);
   //chest1->SetTagName("chest");
   chest2 = new GameObject("assets/newsprites.png", 6, 1, 16, 16, playerScale,//nuevo
   new sf::Vector2f(255, 100), b2BodyType::b2_staticBody, window, world);
@@ -191,7 +200,7 @@ Game::Game()
  
 
   gameObjects->push_back(character1);
-  
+  gameObjects->push_back(enemigo1);
   gameObjects->push_back(chest1);
   gameObjects->push_back(chest2);
   gameObjects->push_back(chest3);
@@ -241,6 +250,11 @@ void Game::Draw()
 
 void Game::Render()
 {
+  for(auto& gameObject : *deleteList){
+    gameObjects->erase(std::remove(gameObjects->begin(), gameObjects->end(), gameObject), gameObjects->end());
+    delete gameObject;
+  }
+  deleteList->clear();
   window->clear(sf::Color(0, 0, 0, 255));
   Draw();
   window->display();
