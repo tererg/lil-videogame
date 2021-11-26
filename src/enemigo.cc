@@ -1,10 +1,12 @@
 #include "enemigo.hh"
 #include "InputsSystem.hh"
 #include "Animation.hh"
-
+#include<iostream>
 
 Animation* upEnemigo{new Animation()};
 Animation* downEnemigo{new Animation()};
+bool flag{};
+int cont{};
 
 enemigo::enemigo(const char* textureUrl, int col, int row, float width, float height, float scale, float moveSpeed,
 sf::Vector2f* position, sf::RenderWindow*& window, b2World*& world) :
@@ -14,8 +16,10 @@ GameObject(textureUrl, col, row, width, height, scale, position, b2BodyType::b2_
 
   rigidbody->SetRotationFreeze(true);
 
-  upEnemigo = new Animation(0, 5, drawable, 0.08f, 4);
-  downEnemigo = new Animation(0, 5, drawable, 0.08f, 7);
+  upEnemigo = new Animation(0, 5, drawable, 0.08f, 3);
+  downEnemigo = new Animation(0, 5, drawable, 0.08f, 3);
+    flag = false;
+    cont = 900;
 }
 
 enemigo::~enemigo()
@@ -33,18 +37,28 @@ void enemigo::Update(float& deltaTime)
 
   //FlipSprite();
   Move();
+ std::cout << flag << std::endl;
+    if ( flag == false){ 
+        cont -= 1 ;
+        rigidbody->Move(b2Vec2(0 * moveSpeed, -1 * moveSpeed / 2));
 
-  if(std::abs(InputsSystem::GetAxis().y < 0))
-  {
-    upEnemigo->Play(deltaTime);
-  }else if(std::abs(InputsSystem::GetAxis().y > 0))
-  {
-    downEnemigo->Play(deltaTime);
-  }  
-  else
-  {
-    downEnemigo->Play(deltaTime);
-  }
+        if (cont <= -300)
+            flag = true;
+      //std::cout << "mayor o igual a 455 - " << this->GetPosition().y << std::endl;
+       
+    }
+
+    if (flag == true)
+    { 
+        cont += 1;
+        rigidbody->Move(b2Vec2(0 * moveSpeed, 1 * moveSpeed / 2));
+
+        if (cont>=900)
+            flag = false;
+       
+        //std::cout << "menor o igual a 455 " << this->GetPosition().y << std::endl;
+    }
+  
 }
 /*
 void enemigo::FlipSprite()
@@ -56,13 +70,9 @@ void enemigo::FlipSprite()
 
 void enemigo::Move()
 {
-    if ( this->GetPosition().y >= 455){
-      rigidbody->Move(b2Vec2(0 * moveSpeed, -1 * moveSpeed));
-    }
-    if (this->GetPosition().y <= 160)
-    {
-        rigidbody->Move(b2Vec2(0 * moveSpeed, 1 * moveSpeed));
-    }
+    
+
+
   //rigidbody->Move(b2Vec2(InputsSystem::GetAxis().x * moveSpeed, InputsSystem::GetAxis().y * moveSpeed));
 }
 
