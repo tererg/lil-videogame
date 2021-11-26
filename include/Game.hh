@@ -16,17 +16,20 @@ private:
   std::vector<GameObject*>* gameObjects;
   std::vector<GameObject*>* deleteList;
   ContactEventManager* contactEventManager{};
-
+//nuevo
+sf::RenderWindow* windowGameOver{};
+sf::RenderWindow* windowWin{};
 
 
 public:
   Game();
   ~Game();
-
+  
   void UpdatePhysics();
   void Render();
   void Init();
   void Update();
   void Draw();
   void Inputs();
+  
 };

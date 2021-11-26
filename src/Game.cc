@@ -8,9 +8,10 @@
 #include<iostream>
 #include "TileGroup.hh"
 #include "enemigo.hh"
+#include "ContactEventManager.hh"
+
 
 Collider* collider{new Collider(100, 100, 100, 100, sf::Color::Green, 5.f)};
-
 sf::Clock* timer{new sf::Clock()};
 float deltaTime{};
 const float playerSpeed{200.f}; 
@@ -53,18 +54,36 @@ GameObject* food8{};
 GameObject* food9{};
 GameObject* food10{};
 
- 
-
 TileGroup* tileGroup{};
-
-sf::View* view1{};//nuevo comment
-
 
 Game::Game()
 {
   window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), GAME_NAME);
   event = new sf::Event();
- 
+  //NUEVO
+  windowGameOver = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH+400, WINDOW_HEIGHT), "GAME OVER BUNNY >:) ");
+  windowWin = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH+400, WINDOW_HEIGHT), "BUNNY, YOURE A WINNER :D ");
+  
+    sf::Texture texture;
+    texture.loadFromFile("assets/maxresdefault.png");
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+    windowGameOver->clear();
+    windowGameOver->draw(sprite);
+    
+    //
+    sf::Texture texture2;
+    texture2.loadFromFile("assets/win.png");
+    sf::Sprite sprite2;
+    sprite2.setTexture(texture2);
+    windowWin->clear();
+    windowWin->draw(sprite2);
+    //windowWin->display();
+    //windowGameOver->display();
+    windowGameOver->setVisible(false);
+    windowWin->setVisible(false);
+//Then, in PlayState::render()
+//game->window.draw(sprite);
   //gravity = new b2Vec2(0.f, -9.8f);
   gravity = new b2Vec2(0.f, 0.f);
   world = new b2World(*gravity);  
@@ -296,7 +315,8 @@ void Game::UpdatePhysics()
 
 void Game::Update()
 {
-  while (window->isOpen())
+  bool juego, win, lose;
+  while (juego)
   {
     while (window->pollEvent(*event))
     {
@@ -310,6 +330,32 @@ void Game::Update()
 
     UpdatePhysics();
 
+
+    while (contactEventManager->resultado == 1)//ganar
+    {
+     sf::Texture texture2;
+    texture2.loadFromFile("assets/win.png");
+    sf::Sprite sprite2;
+    sprite2.setTexture(texture2);
+    window->clear();
+    window->draw(sprite2);
+    window->display();
+    
+    }
+     while(contactEventManager->resultado == 2)
+    {
+       sf::Texture texture;
+    texture.loadFromFile("assets/maxresdefault.png");
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+    window->clear();
+    window->draw(sprite);
+    window->display();
+    
+    }
+
+
+
     Inputs();
     //view1->move();//nuevo
     for(auto& gameObject : *gameObjects)
@@ -318,7 +364,15 @@ void Game::Update()
     }
     Render();
   }
+while (win)
+{
+  
+   
+}
+while(lose)
+{
 
+}
   delete window;
   delete event;
 }

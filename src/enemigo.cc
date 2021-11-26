@@ -19,7 +19,7 @@ GameObject(textureUrl, col, row, width, height, scale, position, b2BodyType::b2_
   upEnemigo = new Animation(0, 5, drawable, 0.08f, 3);
   downEnemigo = new Animation(0, 5, drawable, 0.08f, 3);
     flag = false;
-    cont = 900;
+    cont = 600;
 }
 
 enemigo::~enemigo()
